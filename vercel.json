@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "backend/api/**/*.js",
-      "use": "@vercel/node"
+  "functions": {
+    "backend/api/**/*.js": {
+      "runtime": "@vercel/node",
+      "maxDuration": 30
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/(.*)",
@@ -14,10 +14,5 @@
   ],
   "env": {
     "NODE_ENV": "production"
-  },
-  "functions": {
-    "backend/api/**/*.js": {
-      "maxDuration": 30
-    }
   }
 }
