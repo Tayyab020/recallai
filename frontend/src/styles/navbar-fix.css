@@ -1,0 +1,44 @@
+/* Navbar overlap fix */
+
+/* Ensure main content doesn't overlap with fixed navbar */
+.main-content {
+  padding-top: 64px; /* Standard Material-UI AppBar height */
+  min-height: calc(100vh - 64px);
+}
+
+/* Mobile responsive navbar spacing */
+@media (max-width: 600px) {
+  .main-content {
+    padding-top: 56px; /* Smaller navbar height on mobile */
+    min-height: calc(100vh - 56px);
+  }
+}
+
+/* Ensure proper z-index for navbar */
+.MuiAppBar-root {
+  z-index: 1300 !important; /* Higher than drawer and other components */
+}
+
+/* Fix for drawer overlap on mobile */
+.MuiDrawer-root {
+  z-index: 1200 !important;
+}
+
+/* Ensure content scrolls properly */
+body {
+  overflow-x: hidden;
+}
+
+/* Fix for any floating action buttons or dialogs */
+.MuiFab-root {
+  z-index: 1050;
+}
+
+.MuiDialog-root {
+  z-index: 1400;
+}
+
+/* Smooth scrolling for better UX */
+html {
+  scroll-behavior: smooth;
+}

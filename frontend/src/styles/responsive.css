@@ -1,0 +1,375 @@
+/* Responsive Design System - Navy Blue & Gray Theme */
+
+/* Breakpoint Variables */
+:root {
+  --breakpoint-xs: 0px;
+  --breakpoint-sm: 600px;
+  --breakpoint-md: 900px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1536px;
+  
+  /* Responsive Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+}
+
+/* Mobile First Approach - Base styles for mobile (320px+) */
+
+/* Typography Responsive Scaling */
+.responsive-text {
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+  line-height: 1.6;
+}
+
+.responsive-heading-1 {
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+  line-height: 1.2;
+}
+
+.responsive-heading-2 {
+  font-size: clamp(1.25rem, 4vw, 1.875rem);
+  line-height: 1.3;
+}
+
+.responsive-heading-3 {
+  font-size: clamp(1.125rem, 3.5vw, 1.5rem);
+  line-height: 1.4;
+}
+
+/* Container Responsive Behavior */
+.responsive-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+/* Grid System */
+.responsive-grid {
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: 1fr;
+}
+
+/* Card Responsive Behavior */
+.responsive-card {
+  background-color: var(--color-white);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Button Responsive Behavior */
+.responsive-button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  min-height: 44px; /* Touch target size */
+  border-radius: 8px;
+  transition: var(--transition-normal);
+}
+
+/* Navigation Responsive Behavior */
+.responsive-nav {
+  background-color: var(--color-primary-navy);
+  color: var(--color-white);
+}
+
+.responsive-nav-item {
+  padding: 12px 16px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* Form Elements Responsive */
+.responsive-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border: 1px solid var(--color-cool-gray);
+  border-radius: 8px;
+  min-height: 44px;
+}
+
+/* Tablet Styles (600px - 899px) */
+@media (min-width: 600px) {
+  .responsive-container {
+    padding: 0 var(--spacing-lg);
+  }
+  
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+  
+  .responsive-card {
+    padding: var(--spacing-lg);
+  }
+  
+  .responsive-button {
+    padding: 14px 28px;
+    font-size: 1rem;
+  }
+  
+  /* Two-column layout for forms */
+  .responsive-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  /* Navigation adjustments */
+  .responsive-nav-item {
+    padding: 16px 20px;
+  }
+}
+
+/* Desktop Styles (900px - 1199px) */
+@media (min-width: 900px) {
+  .responsive-container {
+    padding: 0 var(--spacing-xl);
+  }
+  
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+  }
+  
+  .responsive-card {
+    padding: var(--spacing-xl);
+  }
+  
+  .responsive-button {
+    padding: 16px 32px;
+    font-size: 1rem;
+  }
+  
+  /* Three-column layout for forms */
+  .responsive-form-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Sidebar layout */
+  .responsive-sidebar-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--spacing-xl);
+  }
+}
+
+/* Large Desktop Styles (1200px+) */
+@media (min-width: 1200px) {
+  .responsive-container {
+    padding: 0 var(--spacing-xxl);
+  }
+  
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .responsive-card {
+    padding: var(--spacing-xxl);
+  }
+  
+  /* Four-column layout for forms */
+  .responsive-form-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  /* Wide sidebar layout */
+  .responsive-sidebar-layout {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+/* Extra Large Desktop Styles (1536px+) */
+@media (min-width: 1536px) {
+  .responsive-container {
+    max-width: 1400px;
+  }
+  
+  .responsive-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Material-UI Responsive Overrides */
+
+/* AppBar Responsive */
+.MuiAppBar-root {
+  background-color: var(--color-primary-navy);
+}
+
+@media (max-width: 599px) {
+  .MuiToolbar-root {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+}
+
+/* Drawer Responsive */
+@media (max-width: 899px) {
+  .MuiDrawer-paper {
+    width: 280px;
+  }
+}
+
+@media (min-width: 900px) {
+  .MuiDrawer-paper {
+    width: 320px;
+  }
+}
+
+/* Card Responsive */
+.MuiCard-root {
+  margin-bottom: var(--spacing-md);
+}
+
+@media (min-width: 600px) {
+  .MuiCard-root {
+    margin-bottom: var(--spacing-lg);
+  }
+}
+
+/* Button Responsive */
+.MuiButton-root {
+  min-height: 44px;
+  padding: 12px 24px;
+}
+
+@media (max-width: 599px) {
+  .MuiButton-root {
+    width: 100%;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .MuiButton-root:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* TextField Responsive */
+.MuiTextField-root {
+  margin-bottom: var(--spacing-md);
+}
+
+@media (max-width: 599px) {
+  .MuiTextField-root {
+    width: 100%;
+  }
+}
+
+/* Typography Responsive */
+.MuiTypography-h1 {
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+}
+
+.MuiTypography-h2 {
+  font-size: clamp(1.25rem, 4vw, 1.875rem);
+}
+
+.MuiTypography-h3 {
+  font-size: clamp(1.125rem, 3.5vw, 1.5rem);
+}
+
+.MuiTypography-body1 {
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+}
+
+/* Touch Target Optimization */
+@media (pointer: coarse) {
+  .MuiIconButton-root {
+    padding: 12px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  
+  .MuiButton-root {
+    min-height: 48px;
+    padding: 14px 28px;
+  }
+  
+  .MuiTextField-root .MuiInputBase-input {
+    padding: 16px 14px;
+  }
+}
+
+/* High DPI Display Optimization */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .MuiCard-root {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  
+  .MuiButton-contained {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .MuiAppBar-root,
+  .MuiDrawer-root,
+  .MuiButton-root {
+    display: none !important;
+  }
+  
+  .MuiCard-root {
+    box-shadow: none;
+    border: 1px solid var(--color-cool-gray);
+  }
+  
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+}
+
+/* Color Fidelity Across Devices */
+@media (color-gamut: srgb) {
+  :root {
+    --color-primary-navy: #000776;
+    --color-secondary-navy: #003366;
+  }
+}
+
+@media (color-gamut: p3) {
+  :root {
+    --color-primary-navy: color(display-p3 0 0.029 0.463);
+    --color-secondary-navy: color(display-p3 0 0.2 0.4);
+  }
+}
+
+/* Landscape Orientation Adjustments */
+@media (orientation: landscape) and (max-height: 600px) {
+  .MuiAppBar-root {
+    min-height: 48px;
+  }
+  
+  .MuiToolbar-root {
+    min-height: 48px;
+  }
+  
+  .responsive-card {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark Mode Support (if needed in future) */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode would override colors here if implemented */
+  /* Currently maintaining light theme as per design requirements */
+}

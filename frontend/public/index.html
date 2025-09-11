@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000776" />
+    <meta name="description" content="Recall.AI - AI-powered journal app to assist with memory challenges through voice/text entries, emotion detection, and intelligent reminders" />
+    
+    <!-- PWA Meta Tags -->
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/icons/icon-192x192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Critical Font Preloads -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJfecnFHGPc.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Design System Fonts - Inter & Poppins -->
+    <link
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+      />
+    </noscript>
+    
+    <!-- Material-UI Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    
+    <!-- PWA Install Prompt -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Recall.AI" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' http://localhost:5000 https://api.example.com;" />
+    
+    <title>Recall.AI - Memory Assistant</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
+    <!-- PWA Install Prompt -->
+    <div id="pwa-install-prompt" style="display: none;">
+      <div style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: white; border: 1px solid #ccc; border-radius: 8px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000;">
+        <h3 style="margin: 0 0 8px 0; font-size: 16px;">Install Recall.AI</h3>
+        <p style="margin: 0 0 12px 0; font-size: 14px; color: #666;">Install this app on your device for quick access and offline support.</p>
+        <div style="display: flex; gap: 8px;">
+          <button id="pwa-install-btn" style="flex: 1; padding: 8px 16px; background: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer;">Install</button>
+          <button id="pwa-dismiss-btn" style="flex: 1; padding: 8px 16px; background: #f5f5f5; color: #333; border: none; border-radius: 4px; cursor: pointer;">Not Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Offline Indicator -->
+    <div id="offline-indicator" style="display: none; position: fixed; top: 0; left: 0; right: 0; background: #f44336; color: white; text-align: center; padding: 8px; z-index: 1001;">
+      You're offline. Some features may be limited.
+    </div>
+
+    <script>
+      // PWA Install Prompt Logic
+      let deferredPrompt;
+      const installPrompt = document.getElementById('pwa-install-prompt');
+      const installBtn = document.getElementById('pwa-install-btn');
+      const dismissBtn = document.getElementById('pwa-dismiss-btn');
+      const offlineIndicator = document.getElementById('offline-indicator');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installPrompt.style.display = 'block';
+      });
+
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log(`User response to the install prompt: ${outcome}`);
+          deferredPrompt = null;
+          installPrompt.style.display = 'none';
+        }
+      });
+
+      dismissBtn.addEventListener('click', () => {
+        installPrompt.style.display = 'none';
+        localStorage.setItem('pwa-install-dismissed', Date.now());
+      });
+
+      // Check if user previously dismissed the prompt
+      const dismissedTime = localStorage.getItem('pwa-install-dismissed');
+      if (dismissedTime && Date.now() - dismissedTime < 7 * 24 * 60 * 60 * 1000) {
+        installPrompt.style.display = 'none';
+      }
+
+      // Offline/Online Detection
+      function updateOnlineStatus() {
+        if (navigator.onLine) {
+          offlineIndicator.style.display = 'none';
+        } else {
+          offlineIndicator.style.display = 'block';
+        }
+      }
+
+      window.addEventListener('online', updateOnlineStatus);
+      window.addEventListener('offline', updateOnlineStatus);
+      updateOnlineStatus();
+
+      // Service Worker Registration
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+  </body>
+</html>
