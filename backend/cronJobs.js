@@ -6,20 +6,20 @@ const aiController = require('./controllers/aiController');
 const webPush = require('web-push');
 
 // Configure web push (only if VAPID keys are properly set)
-if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
-  try {
-    webPush.setVapidDetails(
-      'mailto:your-email@example.com',
-      process.env.VAPID_PUBLIC_KEY,
-      process.env.VAPID_PRIVATE_KEY
-    );
-  } catch (error) {
-    console.warn('VAPID keys not properly configured:', error.message);
-    console.warn('Push notifications will be disabled until VAPID keys are set up correctly');
-  }
-} else {
-  console.warn('VAPID keys not found in environment variables. Push notifications disabled.');
-}
+// if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+//   try {
+//     webPush.setVapidDetails(
+//       'mailto:your-email@example.com',
+//       process.env.VAPID_PUBLIC_KEY,
+//       process.env.VAPID_PRI\VATE_KEY
+//     );
+//   } catch (error) {
+//     console.warn('VAPID keys not properly configured:', error.message);
+//     console.warn('Push notifications will be disabled until VAPID keys are set up correctly');
+//   }
+// } else {
+//   console.warn('VAPID keys not found in environment variables. Push notifications disabled.');
+// }
 
 // Weekly summary generation (runs every Sunday at 9 AM)
 cron.schedule('0 9 * * 0', async () => {
