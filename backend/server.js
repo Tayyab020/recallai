@@ -1,3 +1,4 @@
+// server.js (refactored)
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -23,8 +24,8 @@ app.use(cors({
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
   message: 'Too many requests from this IP, please try again later.'
 });
 app.use(limiter);
@@ -32,14 +33,16 @@ app.use(limiter);
 // Logging
 app.use(morgan('combined'));
 
-// Body parsing middleware
+// Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.error('MongoDB connection error:', err));
+// MongoDB connection (lazy connect for serverless)
+if (mongoose.connection.readyState === 0) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('MongoDB connected successfully'))
+    .catch(err => console.error('MongoDB connection error:', err));
+}
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -48,7 +51,7 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/reminders', reminderRoutes);
 app.use('/api/voice', voiceAnalysisRoutes);
 
-// Health check endpoint
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
@@ -57,7 +60,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Error handling middleware
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
@@ -71,18 +74,7 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Initialize cron jobs
-require('./cronJobs');
+// ❌ Remove cronJobs and reminderService (serverless functions can’t run continuously)
 
-// Initialize reminder service for alarm scheduling
-const reminderService = require('./services/reminderService');
-console.log('Reminder service initialized for alarm scheduling');
-
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-});
-
+// Export the Express app (no app.listen)
 module.exports = app;
